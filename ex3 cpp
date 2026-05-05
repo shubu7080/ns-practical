@@ -1,0 +1,62 @@
+#include <stdio.h>
+#include <string.h>
+
+#define pf printf
+#define sf scanf
+
+char dc[] = "XDGSZANYOBTMJCEVFHKWPLQURI";
+char ec[] = "abcdefghijklmnopqrstuvwxyz";
+void e(char *);
+void d(char *);
+
+int main()
+{
+    char p[100];
+
+    pf("\n\nEnter plain text: ");
+    sf("%99s", p);   // FIX: prevent buffer overflow
+
+    pf("\nAfter Encryption:\n-----------------\n");
+    e(p);
+    pf("%s", p);
+
+    pf("\nAfter Decryption:\n-----------------\n");
+    d(p);
+    pf("%s", p);
+
+    return 0;
+}
+
+void e(char *p)
+{
+    int l = 0;
+    while (*(p + l) != '\0')
+    {
+        // FIX: ensure character is lowercase
+        if (*(p + l) >= 'a' && *(p + l) <= 'z')
+        {
+            *(p + l) = dc[*(p + l) - 'a'];
+        }
+        l++;
+    }
+}
+
+void d(char *p)
+{
+    int l = 0;
+    while (*(p + l) != '\0')
+    {
+        int i;
+
+        for (i = 0; i < 26; i++)
+        {
+            if (dc[i] == *(p + l))
+                break;
+        }
+
+        if (i < 26)   // FIX: avoid invalid index
+            *(p + l) = ec[i];
+
+        l++;
+    }
+}
